@@ -1,6 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
-from models.user import User
+from models.user import User, UserPost
 from config.db import conn
 from schemas.user import serializeDict, serializeList
 from bson import ObjectId
@@ -19,8 +19,11 @@ async def find_one_user(id):
 
 
 @user.post("/")
-async def create_user(user: User):
-    conn.fastApiTest.user.insert_one(dict(user))
+async def create_user(user: UserPost):
+    if (user.password != user.confirmPassword):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Password didnot matched")
+    newUser = User(**dict(user))
+    conn.fastApiTest.user.insert_one(dict(newUser))
     return serializeList(conn.fastApiTest.user.find())
 
 
