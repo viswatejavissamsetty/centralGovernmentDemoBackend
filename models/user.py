@@ -2,13 +2,25 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    firstName: str
+    fullName: str
     email: str
+    mobileNumber: str
+    dob: str
     password: str
 
 
 class UserPost(BaseModel):
-    firstName: str
+    fullName: str
     email: str
+    mobileNumber: str
+    dob: str
     password: str
     confirmPassword: str
+
+class UpdateUser(BaseModel):
+    fullName: str
+    dob: str
+
+class LoginUser(BaseModel):
+    email: str
+    password: str
